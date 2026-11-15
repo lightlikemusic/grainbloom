@@ -1,0 +1,17 @@
+{
+  "name": "Grainbloom",
+  "manufacturer": "Lightlike",
+  "version": "1.0.0",
+  "format": "vst2",
+  "kind": "effect",
+  "uid": "LwW1",
+  "numInputs": 2,
+  "numOutputs": 2,
+  "category": "Effect",
+  "file32": "VST/grainbloom-arm32.so",
+  "file64": "VST/grainbloom-arm64.so",
+  "description": "Granular micro-loop and texture effect: Mosaic, Cloud, Stutter, Shimmer, Shatter (glitch), Arpeggio and Cascade (multi-tap) modes with pitch, reverse, hold, feedback and reverb.",
+  "author": "Lightlike",
+  "url": "",
+  "license": "MIT"
+}

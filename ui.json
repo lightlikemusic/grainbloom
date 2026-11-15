@@ -1,0 +1,34 @@
+{
+  "kit": "violet",
+  "pages": [
+    { "name": "GRAINS",
+      "controls": [
+        { "param": "Size",     "widget": "knob" },
+        { "param": "Density",  "widget": "knob" },
+        { "param": "Spread",   "widget": "knob" },
+        { "param": "Pitch",    "widget": "knob", "polarity": "bipolar" },
+
+        { "param": "Reverse",  "widget": "knob" },
+        { "param": "Drift",    "widget": "knob" },
+        { "param": "Width",    "widget": "knob" },
+        { "param": "Feedback", "widget": "knob" },
+
+        { "param": "Mode",     "widget": "switch" },
+        { "param": "Sync",     "widget": "switch" },
+        { "param": "Division", "widget": "slider", "overlay": "menu", "visibleWhen": { "param": "Sync", "choice": "On" } },
+        { "param": "Hold",     "widget": "switch" }
+      ] },
+    { "name": "SPACE",
+      "controls": [
+        { "param": "Low Cut",    "widget": "knob" },
+        { "param": "High Cut",   "widget": "knob" },
+        { "param": "Rev Size",   "widget": "knob" },
+        { "param": "Rev Amount", "widget": "knob" },
+
+        { "param": "Mix",        "widget": "fader" },
+        { "param": "Volume",     "widget": "fader" },
+        "empty",
+        "empty"
+      ] }
+  ]
+}
