@@ -22,7 +22,7 @@ It appears under effect plugins as **Grainbloom** by Lightlike.
 
 | Mode | What it does |
 |---|---|
-| **Mosaic** | Tempo-synced slices of the recent past, played back out of order, sometimes reversed or jumped an octave. |
+| **Collage** | Tempo-synced slices of the recent past, played back out of order, sometimes reversed or jumped an octave. |
 | **Cloud** | Many short overlapping grains scattered in time and across the stereo field: pads and smears. |
 | **Stutter** | One slice repeated on the beat with hard edges, re-grabbed every so often. |
 | **Shimmer** | Like Cloud, but every grain is an octave up. Turn up Feedback and the octaves stack. |
@@ -79,16 +79,16 @@ its column.
 
 | Control | Range | What it does |
 |---|---|---|
-| Size | 10–1000 ms | Grain length (Cloud/Shimmer), or slice length in Mosaic/Stutter when Sync is off |
-| Density | 0–100 % | Cloud/Shimmer: how many grains overlap. Mosaic: slice overlap. Stutter: gate length |
-| Spread | 0–100 % | How far back in time grains come from. Stutter: chance of grabbing a new slice. Mosaic: also the chance of octave jumps |
+| Size | 10–1000 ms | Grain length (Cloud/Shimmer), or slice length in Collage/Stutter when Sync is off |
+| Density | 0–100 % | Cloud/Shimmer: how many grains overlap. Collage: slice overlap. Stutter: gate length |
+| Spread | 0–100 % | How far back in time grains come from. Stutter: chance of grabbing a new slice. Collage: also the chance of octave jumps |
 | Pitch | −24…+24 st | Transposes every grain |
 | Reverse | 0–100 % | Chance that a grain plays backwards |
 | Drift | 0–50 ct | Random detune per grain, for a chorus-like width |
 | Width | 0–100 % | Random left/right placement of grains |
 | Feedback | 0–95 % | Feeds the wet signal back into the 8-second buffer |
-| Mode | Mosaic / Cloud / Stutter / Shimmer / Shatter / Arpeggio / Cascade | Grain behaviour (see above) |
-| Sync | Off / On | Mosaic and Stutter slices follow the MPC tempo |
+| Mode | Collage / Cloud / Stutter / Shimmer / Shatter / Arpeggio / Cascade | Grain behaviour (see above) |
+| Sync | Off / On | Collage and Stutter slices follow the MPC tempo |
 | Division | 1/64 … 2/1 | Slice length when Sync is on |
 | Hold | Off / On | Freezes the buffer: stops recording and keeps playing grains from what is captured |
 | Repeats | 0–100 % | Cascade only: number of echoes (1–8) and how slowly they fade. Shown on CONTROLS only while Mode is Cascade |
@@ -115,7 +115,7 @@ None of these are automatable or affect the sound.
 
 ## Built-in programs
 
-Init Mosaic · Glass Cloud · Tape Stutter · Octave Bloom · Reverse Rain · Half-Speed Haze ·
+Init Collage · Glass Cloud · Tape Stutter · Octave Bloom · Reverse Rain · Half Speed ·
 Broken Sixteenths · Endless Pad
 
 Shatter: Glass Shards · Data Storm (wild 1/32 chops) · Skip Beat (sparse 1/8 hits with gaps)
@@ -130,7 +130,7 @@ Cascade: Falling Echoes · Ping Pong Steps (short tight 1/8 echoes) · Endless S
 
 - On a send/return, set Mix to 100 %.
 - Hold is great for freezing a chord into a pad: play it, press Hold, then move Size, Pitch and Spread.
-- With Sync on, Mosaic and Stutter lock to the song position while the MPC is playing.
+- With Sync on, Collage and Stutter lock to the song position while the MPC is playing.
 - Feedback above ~70 % in Shimmer builds up slowly. Pull Low Cut up if it gets muddy.
 
 ## What it does not do (yet)

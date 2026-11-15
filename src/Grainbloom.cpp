@@ -19,7 +19,7 @@
 //   out = (dry · (1 − Mix) + wet · Mix) · Volume
 //
 // Modes (how the scheduler picks grains)
-//   Mosaic  – tempo-synced slices of the recent past, re-ordered, sometimes
+//   Collage – tempo-synced slices of the recent past, re-ordered, sometimes
 //             reversed or jumped an octave. Spread = how far back it looks.
 //   Cloud   – many short overlapping grains scattered in time and stereo.
 //             Density = how many overlap; Spread = how far back they scatter.
@@ -64,14 +64,14 @@ namespace {
 enum ParamIndex
 {
     kVolume = 0,   // dB, master output (param 0 is nudged by the host on load: harmless)
-    kMode,         // Mosaic / Cloud / Stutter / Shimmer
-    kSize,         // ms, grain length (and the slice length in Mosaic/Stutter when Sync is off)
-    kDensity,      // %, overlap (Cloud/Shimmer), slice overlap (Mosaic), gate length (Stutter)
+    kMode,         // Collage / Cloud / Stutter / Shimmer
+    kSize,         // ms, grain length (and the slice length in Collage/Stutter when Sync is off)
+    kDensity,      // %, overlap (Cloud/Shimmer), slice overlap (Collage), gate length (Stutter)
     kSpread,       // %, how far back in time grains are taken from / chance of a new slice
     kPitch,        // semitones added to every grain
     kReverse,      // %, chance a grain plays backwards
     kDrift,        // cents, random detune per grain
-    kSync,         // Mosaic/Stutter slice length follows the MPC tempo
+    kSync,         // Collage/Stutter slice length follows the MPC tempo
     kDivision,     // slice length when synced
     kFeedback,     // %, wet signal fed back into the capture buffer
     kLowCut,       // Hz, high-pass on the wet signal
@@ -94,7 +94,7 @@ enum ParamIndex
     kNumParams
 };
 
-enum Mode { kMosaic = 0, kCloud, kStutter, kShimmer, kShatter, kArpeggio, kCascade, kNumModes };
+enum Mode { kCollage = 0, kCloud, kStutter, kShimmer, kShatter, kArpeggio, kCascade, kNumModes };
 enum RevType { kRoom = 0, kHall, kPlate, kDark };
 
 constexpr float kBufferSeconds = 8.0f;
@@ -321,8 +321,8 @@ public:
     {
         using namespace mpc;
         addParam(floatParam("volume",   "Volume", -24.0f, 6.0f, 0.0f, "dB", 1));
-        addParam(choiceParam("mode",    "Mode", {"Mosaic", "Cloud", "Stutter", "Shimmer",
-                                               "Shatter", "Arpeggio", "Cascade"}, kMosaic));   // new modes appended
+        addParam(choiceParam("mode",    "Mode", {"Collage", "Cloud", "Stutter", "Shimmer",
+                                               "Shatter", "Arpeggio", "Cascade"}, kCollage));   // new modes appended
         addParam(logParam  ("size",     "Size", 10.0f, 1000.0f, 120.0f, "ms", 0));
         addParam(floatParam("density",  "Density", 0.0f, 100.0f, 50.0f, "%", 0));
         addParam(floatParam("spread",   "Spread", 0.0f, 100.0f, 40.0f, "%", 0));
@@ -363,13 +363,13 @@ public:
         // Feedback, LowCut, HighCut, RevSize, RevAmount, Mix, Hold, Width, (~Anim), Grain, Scatter, Space,
         // (5 read-only picture values), Reverb type, Repeats
         // The macros are 0 in every preset: 0 = the preset exactly as stored.
-        addProgram("Init Mosaic",       {0, kMosaic,  112, 48, 53.5,   0, 35.8,  11.8, 1, kDivisionEighth,     36.2,  40, 12000, 64.4, 43, 50, 0,  80.8, 0, 5, -27, -36,  0, 0, 0, 0, 0, kHall, 40});
+        addProgram("Init Collage",      {0, kCollage, 112, 48, 53.5,   0, 35.8,  11.8, 1, kDivisionEighth,     36.2,  40, 12000, 64.4, 43, 50, 0,  80.8, 0, 5, -27, -36,  0, 0, 0, 0, 0, kHall, 40});
         addProgram("Glass Cloud",       {0, kCloud,   131.7, 55.2, 62.5,   0, 12, 16.2, 1, kDivisionEighth,     32.7,  80,  9000, 72.4, 43, 60, 0,  92, 0, 37, -5, -6,  0, 0, 0, 0, 0, kPlate, 40});
         addProgram("Tape Stutter",      {0, kStutter,  77.8, 59.2, 62.5,   0,  26,  16.2, 1, kDivisionSixteenth,   32.9,  40, 14000, 59.2, 46.5, 70, 0,  66, 0, 2, -65, -73,  0, 0, 0, 0, 0, kRoom, 40});
         addProgram("Octave Bloom",     {-2, kShimmer, 179.6, 45.2, 63.5,   0,  10.8,  14.8, 1, kDivisionEighth,     43.8, 120,  8000, 70, 37.5, 60, 0,  90.8, 0, 37, -27, 25,  0, 0, 0, 0, 0, kHall, 40});
         addProgram("Reverse Rain",      {0, kCloud,    67.3, 71.6, 52.5,   0, 68, 6.2, 1, kDivisionEighth,     30.3,  60, 10000, 69.2, 46.5, 55, 0, 78, 0, 21, 55, -23,  0, 0, 0, 0, 0, kPlate, 40});
-        addProgram("Half-Speed Haze",   {0, kCloud,   242.8, 35.6, 47.5, -12, 36, 13.8, 1, kDivisionEighth,     25.9,  40,  6000, 75.8, 46, 55, 0,  86, 0, 36, -15, -2,  0, 0, 0, 0, 0, kDark, 40});
-        addProgram("Broken Sixteenths", {0, kMosaic,  139.8, 34.4, 82.5,   0, 52,  1.2, 1, kDivisionSixteenth,  38.4,  60, 15000, 55.2, 46.5, 65, 0,  62, 0, -11, -5, -63,  0, 0, 0, 0, 0, kRoom, 40});
+        addProgram("Half Speed",        {0, kCloud,   242.8, 35.6, 47.5, -12, 36, 13.8, 1, kDivisionEighth,     25.9,  40,  6000, 75.8, 46, 55, 0,  86, 0, 36, -15, -2,  0, 0, 0, 0, 0, kDark, 40});
+        addProgram("Broken Sixteenths", {0, kCollage, 139.8, 34.4, 82.5,   0, 52,  1.2, 1, kDivisionSixteenth,  38.4,  60, 15000, 55.2, 46.5, 65, 0,  62, 0, -11, -5, -63,  0, 0, 0, 0, 0, kRoom, 40});
         addProgram("Endless Pad",       {0, kCloud,   142.1, 64, 66.5,   0, 17.2, 10.2, 1, kDivisionEighth,     41.1,  40,  9000, 73.2, 39, 80, 0, 97.2, 0, 65, 7, 42,  0, 0, 0, 0, 0, kHall, 40});
         // Added with the Shatter / Arpeggio / Cascade modes (appended so program numbers stay put).
         addProgram("Glass Shards",      {0, kShatter, 105.9, 51.4, 65,   0, 42,  7.5, 1, kDivisionSixteenth,  38.4,  60, 15000, 55.2, 46.5, 70, 0,  72, 0, 9, -30, -63,  0, 0, 0, 0, 0, kRoom, 40});
@@ -474,7 +474,7 @@ public:
 
         // Snap the rhythmic grid to the song position while the MPC is playing.
         // (Shatter only snaps between its ratchet bursts.)
-        const bool gridMode = mode == kMosaic || mode == kStutter || mode == kArpeggio ||
+        const bool gridMode = mode == kCollage || mode == kStutter || mode == kArpeggio ||
                               mode == kCascade || (mode == kShatter && shatterLeft_ == 0);
         if (gridMode && synced && ctx.transport.playing && ctx.transport.ppqValid)
         {
@@ -496,7 +496,7 @@ public:
         switch (mode)
         {
             case kCloud: case kShimmer: overlap = 1.0f + density * 7.0f; break;
-            case kMosaic:               overlap = 1.0f + density;        break;
+            case kCollage:              overlap = 1.0f + density;        break;
             default:                    overlap = 1.0f;                  break;
         }
         const float grainGain = (mode == kCloud || mode == kShimmer) ? 1.4f / std::sqrt(overlap) : 1.0f;
@@ -537,7 +537,7 @@ public:
                 else
                 {
                     interval = (double)stepSamp;
-                    if (mode == kMosaic)        spawnMosaicGrain(stepSamp, density, spread);
+                    if (mode == kCollage)       spawnCollageGrain(stepSamp, density, spread);
                     else if (mode == kArpeggio) spawnArpGrain(stepSamp, density, spread, sr);
                     else if (mode == kCascade)  spawnCascadeGrains(stepSamp, density, spread, get(kRepeats) * 0.01f);
                     else                        spawnStutterGrain(stepSamp, density, spread, sr);
@@ -711,7 +711,7 @@ private:
         start(g, startFor(rate, (int)len, scatter), rate, (int)len, false, 1.0f, gain);
     }
 
-    void spawnMosaicGrain(float stepSamp, float density, float spread)
+    void spawnCollageGrain(float stepSamp, float density, float spread)
     {
         const float len = stepSamp * (1.0f + density);   // overlap up to 2 slices
         float extra = 0.0f;

@@ -57,7 +57,7 @@ HEADER_STYLE = base.text_style(30.0, "ffe9edf5", style="SemiBold",
                                just="horizontallyCentred verticallyCentred", case="Upper Case")
 # Choice names for parameters the skin did not list yet (must match the plugin's choices).
 REPLACEMENTS = {REVTYPE: ["Room", "Hall", "Plate", "Dark"],
-                base.MODE: ["Mosaic", "Cloud", "Stutter", "Shimmer", "Shatter", "Arpeggio", "Cascade"]}
+                base.MODE: ["Collage", "Cloud", "Stutter", "Shimmer", "Shatter", "Arpeggio", "Cascade"]}
 
 
 def fixed_text(name, text, rect, style):

@@ -490,12 +490,12 @@ def bloom_motion(i, n=MOTION_FRAMES):
 
 
 def mode_emblem(mode):
-    """Static backdrop per mode: Mosaic tiles, Cloud haze, Stutter bars, Shimmer sparks."""
+    """Static backdrop per mode: Collage tiles, Cloud haze, Stutter bars, Shimmer sparks."""
     img, s = _layer()
     d = ImageDraw.Draw(img)
     c = s / 2
     rnd = random.Random(40 + mode)
-    if mode == 0:  # Mosaic: a ring of tiles
+    if mode == 0:  # Collage: a ring of tiles
         for ring, count in ((0.40, 22), (0.31, 16)):
             for i in range(count):
                 a = math.tau * i / count + ring
